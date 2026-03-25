@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  people    Person[]
+}
+
+model Person {
+  id              String   @id @default(cuid())
+  fullName        String
+  cep             String
+  street          String
+  complement      String   @default("")
+  neighborhood    String
+  city            String
+  state           String
+  idNumber        String
+  phone           String
+  hasDenomination Boolean  @default(false)
+  denomination    String?
+  createdAt       DateTime @default(now())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
