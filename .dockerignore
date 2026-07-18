@@ -2,5 +2,13 @@ node_modules
 .next
 .git
 .env
+.env.*
 *.log
 npm-debug.log*
+api
+src/generated
+Dockerfile*
+docker-compose*.yml
+DOCKER.md
+RAILWAY.md
+README.md
