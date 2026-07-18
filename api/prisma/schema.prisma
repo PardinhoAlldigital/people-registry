@@ -34,16 +34,26 @@ model Person {
   neighborhood      String
   city              String
   state             String
-  idNumber          String
+  idNumber          String   @default("")
   phone             String
   hasDenomination   Boolean  @default(false)
   denomination      String?
   acceptsBibleStudy Boolean  @default(false)
   acceptsVisit      Boolean  @default(false)
+  howHeard          String   @default("")
   services          String[]
   serviceTickets    Json     @default("{}")
   groupId           String
   createdById       String
   createdBy         User     @relation(fields: [createdById], references: [id])
   createdAt         DateTime @default(now())
+}
+
+model Service {
+  id        String   @id @default(cuid())
+  name      String
+  groupId   String
+  createdAt DateTime @default(now())
+
+  @@unique([groupId, name])
 }

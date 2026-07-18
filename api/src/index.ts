@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRouter from './routes/auth.js';
 import peopleRouter from './routes/people.js';
 import teamRouter from './routes/team.js';
+import servicesRouter from './routes/services.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
@@ -20,6 +21,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/people', peopleRouter);
 app.use('/api/team', teamRouter);
+app.use('/api/services', servicesRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Rota não encontrada.' });

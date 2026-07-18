@@ -37,7 +37,7 @@ export default function PersonalSection({ register, control, errors }: Props) {
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
-            label="RG (Número de Identidade)"
+            label="RG (opcional)"
             fullWidth
             {...register('idNumber')}
             error={!!errors.idNumber}

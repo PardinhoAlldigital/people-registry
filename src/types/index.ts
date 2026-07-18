@@ -37,6 +37,7 @@ export interface Person {
   denomination?: string;
   acceptsBibleStudy: boolean;
   acceptsVisit: boolean;
+  howHeard?: string;
   services: string[];
   serviceTickets?: Record<string, string>;
   groupId: string;
@@ -69,6 +70,14 @@ export const DENOMINATIONS = [
   'Outro',
 ] as const;
 
+export interface Service {
+  id: string;
+  name: string;
+  groupId: string;
+  createdAt: string;
+}
+
+/** Serviços padrão — usados como fallback/seed. A lista real vem da API por grupo. */
 export const SERVICES = [
   'Oculista',
   'Dentista',

@@ -12,6 +12,7 @@ import PersonalSection from './PersonalSection';
 import AddressSection from './AddressSection';
 import DenominationSection from './DenominationSection';
 import QuestionsSection from './QuestionsSection';
+import ReferralSection from './ReferralSection';
 import ServicesSection from './ServicesSection';
 
 const schema = z.object({
@@ -22,12 +23,13 @@ const schema = z.object({
   neighborhood: z.string().min(1, 'Bairro obrigatório'),
   city: z.string().min(1, 'Cidade obrigatória'),
   state: z.string().min(2, 'UF obrigatório'),
-  idNumber: z.string().min(1, 'RG obrigatório'),
+  idNumber: z.string().optional(),
   phone: z.string().min(14, 'Telefone inválido'),
   hasDenomination: z.enum(['yes', 'no']),
   denomination: z.string().optional(),
   acceptsBibleStudy: z.enum(['yes', 'no']),
   acceptsVisit: z.enum(['yes', 'no']),
+  howHeard: z.string().optional(),
   services: z.array(z.string()),
   serviceTickets: z.record(z.string(), z.string()).optional(),
 }).refine(
@@ -58,6 +60,8 @@ export default function PersonForm() {
       acceptsBibleStudy: 'no',
       acceptsVisit: 'no',
       complement: '',
+      idNumber: '',
+      howHeard: '',
       services: [],
     },
   });
@@ -75,12 +79,13 @@ export default function PersonForm() {
         neighborhood: data.neighborhood,
         city: data.city,
         state: data.state,
-        idNumber: data.idNumber,
+        idNumber: data.idNumber ?? '',
         phone: data.phone,
         hasDenomination: data.hasDenomination === 'yes',
         denomination: data.hasDenomination === 'yes' ? data.denomination : undefined,
         acceptsBibleStudy: data.acceptsBibleStudy === 'yes',
         acceptsVisit: data.acceptsVisit === 'yes',
+        howHeard: data.howHeard ?? '',
         services: data.services,
       serviceTickets: data.serviceTickets ?? {},
       });
@@ -130,6 +135,9 @@ export default function PersonForm() {
         </SectionCard>
         <SectionCard>
           <QuestionsSection control={control as any} />
+        </SectionCard>
+        <SectionCard>
+          <ReferralSection register={register as any} />
         </SectionCard>
 
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>

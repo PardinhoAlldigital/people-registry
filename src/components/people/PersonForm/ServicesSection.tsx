@@ -1,9 +1,9 @@
 import { Autocomplete, Box, Chip, Stack, TextField, Typography } from '@mui/material';
 import { ConfirmationNumber, MedicalServices } from '@mui/icons-material';
 import { Controller, Control, UseFormRegister, UseFormSetValue, useWatch, FieldValues } from 'react-hook-form';
-import { useEffect, useRef } from 'react';
-import { SERVICES } from '@/types';
+import { useEffect, useMemo, useRef } from 'react';
 import { usePeopleStore } from '@/store/peopleStore';
+import { useServicesStore } from '@/store/servicesStore';
 import FormSection from '@/components/ui/FormSection';
 
 interface Props {
@@ -15,6 +15,9 @@ interface Props {
 export default function ServicesSection({ control, register, setValue }: Props) {
   const selectedServices: string[] = useWatch({ control, name: 'services' }) ?? [];
   const { people, fetchPeople, loading } = usePeopleStore();
+  const { services, fetchServices } = useServicesStore();
+
+  const serviceOptions = useMemo(() => services.map((s) => s.name), [services]);
 
   // Serviços aguardando dados carregarem para auto-preencher
   const pendingRef = useRef<string[]>([]);
@@ -23,6 +26,7 @@ export default function ServicesSection({ control, register, setValue }: Props) 
   // Garante dados frescos ao abrir o formulário
   useEffect(() => {
     fetchPeople();
+    fetchServices();
   }, []);
 
   function getNextTicket(svc: string): string {
@@ -31,7 +35,7 @@ export default function ServicesSection({ control, register, setValue }: Props) 
       .map((p) => Number(p.serviceTickets![svc]))
       .filter((n) => !isNaN(n) && n > 0);
 
-    return numbers.length === 0 ? '20' : String(Math.max(...numbers) + 1);
+    return numbers.length === 0 ? '1' : String(Math.max(...numbers) + 1);
   }
 
   // Quando um serviço é adicionado: preenche imediatamente se já carregou,
@@ -75,7 +79,7 @@ export default function ServicesSection({ control, register, setValue }: Props) 
         render={({ field }) => (
           <Autocomplete
             multiple
-            options={[...SERVICES]}
+            options={serviceOptions}
             value={field.value ?? []}
             onChange={(_, newValue) => field.onChange(newValue)}
             disableCloseOnSelect

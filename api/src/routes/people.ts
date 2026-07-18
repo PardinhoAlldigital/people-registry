@@ -2,19 +2,10 @@ import { Router, Response } from 'express';
 import { prisma } from '../lib/prisma.js';
 import { requireAuth, AuthRequest } from '../middleware/auth.js';
 import { personSchema } from '../lib/validation.js';
+import { resolveGroupId } from '../lib/group.js';
 import { ZodError } from 'zod';
 
 const router = Router();
-
-/** Resolve the groupId for the current user.
- *  - ADMIN: groupId = user.id
- *  - MEMBER: groupId = user.adminId
- */
-async function resolveGroupId(userId: string, role: 'ADMIN' | 'MEMBER'): Promise<string> {
-  if (role === 'ADMIN') return userId;
-  const user = await prisma.user.findUnique({ where: { id: userId }, select: { adminId: true } });
-  return user?.adminId ?? userId;
-}
 
 // GET /api/people
 router.get('/', requireAuth, async (req: AuthRequest, res: Response): Promise<void> => {

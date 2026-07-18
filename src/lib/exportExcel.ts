@@ -14,6 +14,7 @@ export function exportToExcel(people: Person[]) {
     Telefone: p.phone,
     'Possui Religião': p.hasDenomination ? 'Sim' : 'Não',
     Religião: p.hasDenomination ? (p.denomination ?? '-') : '-',
+    'Como soube da feira': p.howHeard ?? '',
     'Data de Cadastro': new Date(p.createdAt).toLocaleDateString('pt-BR'),
   }));
 

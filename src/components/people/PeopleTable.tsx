@@ -169,7 +169,9 @@ export default function PeopleTable() {
                           </Avatar>
                           <Box>
                             <Typography variant="body2" fontWeight={600} sx={{ color: '#0F172A' }}>{p.fullName}</Typography>
-                            <Typography variant="caption" color="text.secondary">RG: {p.idNumber}</Typography>
+                            {p.idNumber
+                              ? <Typography variant="caption" color="text.secondary">RG: {p.idNumber}</Typography>
+                              : <Typography variant="caption" color="text.disabled">Sem RG</Typography>}
                           </Box>
                         </Box>
                       </TableCell>
@@ -274,7 +276,7 @@ export default function PeopleTable() {
           {detailTarget && (
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
               {([
-                ['RG', detailTarget.idNumber, false],
+                ['RG', detailTarget.idNumber || 'Não informado', false],
                 ['Telefone', detailTarget.phone, false],
                 ['CEP', detailTarget.cep, false],
                 ['UF', detailTarget.state, false],
@@ -284,6 +286,7 @@ export default function PeopleTable() {
                 ['Religião', detailTarget.hasDenomination ? detailTarget.denomination! : 'Não informado', false],
                 ['Estuda Bíblia', detailTarget.acceptsBibleStudy ? 'Sim' : 'Não', false],
                 ['Aceita Visita', detailTarget.acceptsVisit ? 'Sim' : 'Não', false],
+                ...(detailTarget.howHeard ? [['Como soube da feira', detailTarget.howHeard, true] as [string, string, boolean]] : []),
                 ['Cadastrado em', new Date(detailTarget.createdAt).toLocaleDateString('pt-BR'), false],
                 ...(detailTarget.createdBy ? [['Registrado por', detailTarget.createdBy.name, false] as [string, string, boolean]] : []),
               ] as [string, string, boolean][]).map(([label, value, full]) => (
